@@ -6,12 +6,12 @@ const Header: React.FC = () => {
   return (
     <Container>
       <SubHeader>
-        <p>로그인/회원가입</p>
+        <P>로그인/회원가입</P>
       </SubHeader>
       <MainHeader>
         <Img src={Logo} alt="Logo" />
         <InputWrap>
-          <input placeholder="검색어를 입력하세요" />
+          <Input type="text" placeholder="검색어를 입력하세요." />
         </InputWrap>
         <ButtonWrap>
           <Button1>판매하기</Button1>
@@ -32,14 +32,16 @@ const Container = styled.header`
 `
 
 const SubHeader = styled.div`
-  padding: 10px;
+  margin-right: 5%;
+  align-self: flex-end;
 `
 
 const MainHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
+  padding: 0px 50px;
+  gap: 20px;
 `
 
 const Img = styled.img`
@@ -47,39 +49,52 @@ const Img = styled.img`
 `
 
 const InputWrap = styled.div`
+  display: flex;
+  align-item: center;
   flex: 1;
   margin: 0 10px;
-  width: 831px;
-  height: 75px;
+  width: 500px;
+  height: 50px;
   flex-shrink: 0;
   border-radius: 30px;
   background: #f3f3f3;
 `
 
-const ButtonWrap = styled.div`
-  display: flex;
-  gap: 10px;
+const Input = styled.input`
+  font-size: 18px;
+  width: 450px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 30px;
+  background: transparent;
+  padding: 0 20px;
+  outline: none;
 `
 
-const Button1 = styled.div`
-  width: 232px;
-  height: 58px;
+const ButtonWrap = styled.div`
+  display: flex;
+  gap: 20px;
+`
+
+const Button = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 40px;
   flex-shrink: 0;
-  fill: #def3ff;
+  border-radius: 30px;
+  background: #def3ff;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 `
-const Button2 = styled.div`
-  width: 232px;
-  height: 58px;
-  flex-shrink: 0;
-  fill: #def3ff;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+const Button1 = styled(Button)``
+const Button2 = styled(Button)``
+const Button3 = styled(Button)``
+
+const P = styled.p`
+  display: flex;
+  align-left: auto;
 `
-const Button3 = styled.div`
-  width: 232px;
-  height: 58px;
-  flex-shrink: 0;
-  fill: #def3ff;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-`
+
 export default Header
