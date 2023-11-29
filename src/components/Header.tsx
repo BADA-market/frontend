@@ -11,7 +11,7 @@ const Header: React.FC = () => {
       <MainHeader>
         <Img src={Logo} alt="Logo" />
         <InputWrap>
-          <Input type="text" placeholder="검색어를 입력하세요." />
+          <Input type="text" placeholder="원하는 물품이나 동네를 검색하세요." />
         </InputWrap>
         <ButtonWrap>
           <Button1>판매하기</Button1>
