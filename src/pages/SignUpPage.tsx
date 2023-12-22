@@ -55,7 +55,7 @@ function SignUpPage() {
             </InputDetailAddressWrap>
           </AddressWrap>
           <SignUpBtn>회원가입 하기</SignUpBtn>
-          <LoginBtn>
+          <LoginWrap>
             <p style={{ fontSize: '20px', color: '#B9B9B9', margin: '0 20px 0 20px' }}>
               이미 회원이신가요?
             </p>
@@ -68,7 +68,7 @@ function SignUpPage() {
               }}>
               로그인 하기
             </p>
-          </LoginBtn>
+          </LoginWrap>
         </ModalWrap>
       </Container>
     </div>
@@ -288,7 +288,7 @@ const SignUpBtn = styled.div`
   background: #5dc5ff;
   margin: 20px;
 `
-const LoginBtn = styled.div`
+const LoginWrap = styled.div`
   display: flex;
   flex-direction: row;
 `
