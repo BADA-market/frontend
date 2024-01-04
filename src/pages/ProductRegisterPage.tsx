@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState, useRef } from 'react'
 import styled from 'styled-components'
 import CameraIcon from '../assets/images/camera.png'
+import { useNavigate } from 'react-router-dom'
 
 const categories: string[] = [
   '디지털기기',
@@ -20,6 +21,8 @@ const categories: string[] = [
 const dealLocationOptions: string[] = ['내 위치', '최근 지역', '주소 검색', '지역 설정 안함']
 
 const ProductRegisterPage: React.FC = () => {
+  const navigate = useNavigate()
+
   const [productName, setProductName] = useState('')
   const [productImage, setProductImage] = useState<string | null>(null)
   const [price, setPrice] = useState('')
@@ -60,59 +63,52 @@ const ProductRegisterPage: React.FC = () => {
     fileInput?.click()
   }
 
-  // 누락된 항목 포커스 해주는 함수
+  const focusOnFirstMissingField = () => {
+    const firstMissingField = getFirstMissingField()
+    if (firstMissingField) {
+      const refObject: Record<string, React.RefObject<HTMLInputElement>> = {
+        productName: productNameRef,
+        price: priceRef,
+        description: descriptionRef,
+        dealLocation: dealLocationRef,
+      }
+      refObject[firstMissingField]?.current?.focus()
+    }
+  }
+
   const handleProductRegistration = () => {
     const missingFieldsArray = getMissingFields()
     setMissingFields(missingFieldsArray)
 
     if (missingFieldsArray.length > 0) {
-      getFirstMissingField()
+      focusOnFirstMissingField()
+      console.log('누락된 필드가 있습니다:', missingFieldsArray)
     } else {
-      console.log('상품 등록 완료!')
+      console.log('상품 등록 완료!', productName, productImage, price, description, dealLocation)
+      navigate(
+        `/MyPostPage?productName=${productName}&productImage=${productImage}&price=${price}&description=${description}&dealLocation=${dealLocation}`,
+      )
     }
   }
 
-  // 누락된 필드가 뭔지 첫번째부터 찾아주는 함수
   const getFirstMissingField = (): string | undefined => {
-    if (!productName) {
-      return 'productName'
-    }
-    if (!price) {
-      return 'price'
-    }
-    if (!description) {
-      return 'description'
-    }
-    if (!dealLocation && dealLocation !== '지역 설정 안함') {
-      return 'dealLocation'
-    }
-    if (selectedCategories.length === 0) {
-      return 'category'
-    }
+    if (!productName) return 'productName'
+    if (!price) return 'price'
+    if (!description) return 'description'
+    if (!dealLocation && dealLocation !== '지역 설정 안함') return 'dealLocation'
+    if (selectedCategories.length === 0) return 'category'
     return undefined
   }
 
   const getMissingFields = (): string[] => {
     const fields: string[] = []
 
-    if (!productImage) {
-      fields.push('productImage')
-    }
-    if (!productName) {
-      fields.push('productName')
-    }
-    if (!price) {
-      fields.push('price')
-    }
-    if (!description) {
-      fields.push('description')
-    }
-    if (!dealLocation && dealLocation !== '지역 설정 안함') {
-      fields.push('dealLocation')
-    }
-    if (selectedCategories.length === 0) {
-      fields.push('category')
-    }
+    if (!productImage) fields.push('productImage')
+    if (!productName) fields.push('productName')
+    if (!price) fields.push('price')
+    if (!description) fields.push('description')
+    if (!dealLocation && dealLocation !== '지역 설정 안함') fields.push('dealLocation')
+    if (selectedCategories.length === 0) fields.push('category')
 
     return fields
   }
