@@ -37,13 +37,20 @@ function SignUpPage() {
     return nickname.toLowerCase().match(/^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|].{1,8}$/)
   }
 
+  const [isloginIdValid, setIsLoginIdValid] = useState(false)
   const isEmailValid = validateEmail(email)
   const isPwdValid = validatePwd(password)
   const isConfirmPwd = password === confirmPwd
   const isNicknameValid = validateNickname(nickname)
   const [isAddressValid, setIsAddressValid] = useState(false)
   // && checkLoginId && checkNickname; 은 추후에 추가
-  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isNicknameValid && isAddressValid
+  const isAllValid =
+    isloginIdValid &&
+    isEmailValid &&
+    isPwdValid &&
+    isConfirmPwd &&
+    isNicknameValid &&
+    isAddressValid
 
   // 이메일
   const onChangeEmail = useCallback(
@@ -139,7 +146,14 @@ function SignUpPage() {
       }),
     })
       .then((response) => response.json())
-      .then((result) => alert(result ? '사용가능한 아이디입니다.' : '중복된 아이디입니다.'))
+      .then((result) => {
+        if (result) {
+          setIsLoginIdValid(true)
+          alert('사용가능한 아이디입니다.')
+        } else {
+          alert('중복된 아이디입니다.')
+        }
+      })
       .catch((error) => console.error('Error:', error))
   }
 
