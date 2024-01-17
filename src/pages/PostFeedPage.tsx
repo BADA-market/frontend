@@ -11,7 +11,7 @@ interface Post {
 
 const PostFeedPage: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([])
-  const [sorting, setSorting] = useState<'등록순' | '인기순' | '카테고리'>('등록순')
+  // const [sorting, setSorting] = useState<'등록순' | '인기순' | '카테고리'>('등록순')
 
   useEffect(() => {
     // localStorage에서 최신 게시물 데이터를 불러오기

@@ -7,32 +7,38 @@ import ProductRegisterPage from './pages/ProductRegisterPage'
 import MyPostPage from './pages/MyPostPage'
 import PostFeedPage from './pages/PostFeedPage'
 import Posts from './components/Posts'
+import Chat from './pages/Chat'
+import Header from './components/Header'
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<TestPage />} />
-        <Route path="/sign_up" element={<SignUpPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/ProductRegister" element={<ProductRegisterPage />} />
-        <Route path="/PostFeed" element={<PostFeedPage />} />
-        <Route
-          path="/MyPostPage"
-          element={
-            <MyPostPage
-              productName={''}
-              productImage={null}
-              price={''}
-              description={''}
-              dealLocation={''}
-              category=""
-            />
-          }
-        />
-        <Route path="/Posts" element={<Posts />} />
-      </Routes>
-    </Router>
+    <div>
+      <Header />
+      <Router>
+        <Routes>
+          <Route path="/" element={<TestPage />} />
+          <Route path="/sign_up" element={<SignUpPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/ProductRegister" element={<ProductRegisterPage />} />
+          <Route path="/PostFeed" element={<PostFeedPage />} />
+          <Route
+            path="/MyPostPage"
+            element={
+              <MyPostPage
+                productName={''}
+                productImage={null}
+                price={''}
+                description={''}
+                dealLocation={''}
+                category=""
+              />
+            }
+          />
+          <Route path="/Posts" element={<Posts />} />
+          <Route path="/Chat" element={<Chat />} />
+        </Routes>
+      </Router>
+    </div>
   )
 }
 
