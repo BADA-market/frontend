@@ -5,6 +5,8 @@ import SignUpPage from './pages/SignUpPage'
 import LoginPage from './pages/LoginPage'
 import ProductRegisterPage from './pages/ProductRegisterPage'
 import MyPostPage from './pages/MyPostPage'
+import PostFeedPage from './pages/PostFeedPage'
+import Posts from './components/Posts'
 
 function App() {
   return (
@@ -13,7 +15,8 @@ function App() {
         <Route path="/" element={<TestPage />} />
         <Route path="/sign_up" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/ProductRegisterPage" element={<ProductRegisterPage />} />
+        <Route path="/ProductRegister" element={<ProductRegisterPage />} />
+        <Route path="/PostFeed" element={<PostFeedPage />} />
         <Route
           path="/MyPostPage"
           element={
@@ -27,6 +30,7 @@ function App() {
             />
           }
         />
+        <Route path="/Posts" element={<Posts />} />
       </Routes>
     </Router>
   )
