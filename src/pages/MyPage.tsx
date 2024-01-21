@@ -36,7 +36,6 @@ function MyPage() {
       {selectedMenu !== null && (
         <MenuList>
           <p>List for {['내 상품', '찜 목록', '내 후기', '거래내역'][selectedMenu]}</p>
-          {/* Add your list items here */}
         </MenuList>
       )}
     </div>
