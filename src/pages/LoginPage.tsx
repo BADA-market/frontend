@@ -5,6 +5,7 @@ import Kakao from '../assets/images/kakao.png'
 import Naver from '../assets/images/naver.png'
 import Google from '../assets/images/google.png'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 // interface LoginProps {}
 
 function LoginPage() {
@@ -24,28 +25,35 @@ function LoginPage() {
     navigate('/sign_up')
   }
 
-  // 추후 백엔드 연동할때 url 수정
   const handleLoginBtnClick = () => {
-    fetch('http://localhost:8080/users/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    axios
+      .post('http://localhost:8080/login', {
         loginId: loginId,
         password: password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (result) {
+      })
+      .then((response) => {
+        if (response.data) {
           alert('로그인 성공.')
           navigate('/')
         } else {
           alert('로그인 실패')
         }
       })
-      .catch((error) => console.error('Error:', error))
+      .catch((error) => {
+        console.error('Error:', error)
+      })
+  }
+
+  const handleKakaoBtnClick = () => {
+    axios.get('http://localhost:8080/oauth2/authorization/kakao', {})
+  }
+
+  const handleNaverBtnClick = () => {
+    axios.get('http://localhost:8080/oauth2/authorization/naver', {})
+  }
+
+  const handleGoogleBtnClick = () => {
+    axios.get('http://localhost:8080/oauth2/authorization/google', {})
   }
 
   return (
@@ -75,15 +83,15 @@ function LoginPage() {
             </p>
             <SignUpBtn onClick={handleSignupBtnClick}>회원가입 하기</SignUpBtn>
           </SignUpWrap>
-          <KakaoLogin>
+          <KakaoLogin onClick={handleKakaoBtnClick}>
             <KakaoLogo src={Kakao} alt="Logo" />
             카카오로 로그인하기
           </KakaoLogin>
-          <NaverLogin>
+          <NaverLogin onClick={handleNaverBtnClick}>
             <NaverLogo src={Naver} alt="Logo" />
             네이버로 로그인하기
           </NaverLogin>
-          <GoogleLogin>
+          <GoogleLogin onClick={handleGoogleBtnClick}>
             <GoogleLogo src={Google} alt="Logo" />
             구글로 로그인하기
           </GoogleLogin>
