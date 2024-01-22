@@ -11,7 +11,11 @@ const Header: React.FC = () => {
     setSearchInput(event.target.value)
   }
 
-  const onClickLoginButton = () => {
+  const handleLogoBtnClick = () => {
+    navigate('/')
+  }
+
+  const handleLoginBtnClick = () => {
     navigate('/login')
   }
 
@@ -19,21 +23,23 @@ const Header: React.FC = () => {
     setSearchInput('')
   }
 
-  const onClickProductRegisterButton = () => {
+  const handleProductRegisterBtnClick = () => {
     navigate('/ProductRegisterPage')
   }
 
-  const onClickMypageButton = () => {
+  const handleMypageBtnClick = () => {
     navigate('/mypage')
   }
 
   return (
     <Container>
       <SubHeader>
-        <LoginButton onClick={onClickLoginButton}>로그인/회원가입</LoginButton>
+        <LoginButton onClick={handleLoginBtnClick}>로그인/회원가입</LoginButton>
       </SubHeader>
       <MainHeader>
-        <Img src={Logo} alt="Logo" />
+        <LogoBtn onClick={handleLogoBtnClick}>
+          <Img src={Logo} alt="Logo" />
+        </LogoBtn>
         <InputWrap>
           <Input
             type="text"
@@ -44,8 +50,8 @@ const Header: React.FC = () => {
           <ClearIcon onClick={handleClearInput}>x</ClearIcon>
         </InputWrap>
         <ButtonWrap>
-          <Button onClick={onClickProductRegisterButton}>판매하기</Button>
-          <Button onClick={onClickMypageButton}>마이페이지</Button>
+          <Button onClick={handleProductRegisterBtnClick}>판매하기</Button>
+          <Button onClick={handleMypageBtnClick}>마이페이지</Button>
           <Button>대화하기</Button>
         </ButtonWrap>
       </MainHeader>
@@ -126,6 +132,18 @@ const Button = styled.button`
   border: none;
   background: #def3ff;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  cursor: pointer;
+`
+
+const LogoBtn = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  flex-shrink: 0;
+  border: none;
+  padding: 0;
+  background-color: #ffffff;
   cursor: pointer;
 `
 
