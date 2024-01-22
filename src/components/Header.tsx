@@ -11,6 +11,10 @@ const Header: React.FC = () => {
     setSearchInput(event.target.value)
   }
 
+  const onClickLoginButton = () => {
+    navigate('/login')
+  }
+
   const handleClearInput = () => {
     setSearchInput('')
   }
@@ -26,7 +30,7 @@ const Header: React.FC = () => {
   return (
     <Container>
       <SubHeader>
-        <A href="/sign_up">로그인/회원가입</A>
+        <LoginButton onClick={onClickLoginButton}>로그인/회원가입</LoginButton>
       </SubHeader>
       <MainHeader>
         <Img src={Logo} alt="Logo" />
@@ -125,11 +129,14 @@ const Button = styled.button`
   cursor: pointer;
 `
 
-const A = styled.a`
-  display: flex;
-  align-left: auto;
-  text-decoration: none;
-  color: black;
+const LoginButton = styled.button`
+  font-size: 15px;
+  color: #000000;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
 `
 
 export default Header
