@@ -1,9 +1,162 @@
-import React from 'react'
+import React, { ChangeEvent, useCallback, useState } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import Logo from '../assets/images/BADA.png'
+import PostalCodeModal from '../components/PostalCodeModal'
+import { useNavigate } from 'react-router-dom'
 // interface SignUpProps {}
 
 function SignUpPage() {
+  const navigate = useNavigate()
+
+  const [nickname, setNickname] = useState('')
+  const [loginId, setLoginId] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPwd, setConfirmPwd] = useState('')
+  const [address, setAddress] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+
+  const [emailMsg, setEmailMsg] = useState('')
+  const [pwdMsg, setPwdMsg] = useState('')
+  const [confirmPwdMsg, setConfirmPwdMsg] = useState('')
+  const [nicknameMsg, setNicknameMsg] = useState('')
+
+  const validateEmail = (email: string) => {
+    return email
+      .toLowerCase()
+      .match(
+        /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/,
+      )
+  }
+
+  const validatePwd = (password: string) => {
+    return password.toLowerCase().match(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{10,25}$/)
+  }
+
+  const validateNickname = (nickname: string) => {
+    return nickname.toLowerCase().match(/^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|].{1,8}$/)
+  }
+
+  const [isloginIdValid, setIsLoginIdValid] = useState(false)
+  const isEmailValid = validateEmail(email)
+  const isPwdValid = validatePwd(password)
+  const isConfirmPwd = password === confirmPwd
+  const isNicknameValid = validateNickname(nickname)
+  const [isAddressValid, setIsAddressValid] = useState(false)
+  // && checkLoginId && checkNickname; 은 추후에 추가
+  const isAllValid =
+    isloginIdValid &&
+    isEmailValid &&
+    isPwdValid &&
+    isConfirmPwd &&
+    isNicknameValid &&
+    isAddressValid
+
+  // 이메일
+  const onChangeEmail = useCallback(
+    async (e: ChangeEvent<HTMLInputElement>) => {
+      const currEmail = e.target.value
+      setEmail(currEmail)
+
+      if (!validateEmail(currEmail)) {
+        setEmailMsg('이메일 형식이 올바르지 않습니다.')
+      } else {
+        setEmailMsg('')
+      }
+    },
+    [validateEmail],
+  )
+
+  // 비밀번호
+  const onChangePwd = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const currPwd = e.target.value
+      setPassword(currPwd)
+
+      if (!validatePwd(currPwd)) {
+        setPwdMsg('영문, 숫자, 특수기호 조합으로 10자리 이상 입력해주세요.')
+      } else {
+        setPwdMsg('')
+      }
+    },
+    [validatePwd],
+  )
+
+  // 비밀번호 확인
+  const onChangeConfirmPwd = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const currConfirmPwd = e.target.value
+      setConfirmPwd(currConfirmPwd)
+
+      if (currConfirmPwd !== password) {
+        setConfirmPwdMsg('비밀번호가 일치하지 않습니다.')
+      } else {
+        setConfirmPwdMsg('비밀번호가 일치합니다.')
+      }
+    },
+    [password],
+  )
+
+  // 닉네임
+  const onChangeNickname = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const currNickname = e.target.value
+      setNickname(currNickname)
+
+      if (!validateNickname(currNickname)) {
+        setNicknameMsg('1글자 이상 9글자 미만으로 입력해주세요.')
+      } else {
+        setNicknameMsg('')
+      }
+    },
+    [validateNickname],
+  )
+
+  const handleLoginIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const updateNickname = event.target.value
+    setLoginId(updateNickname)
+  }
+
+  const completeHandler = (data: { address: string }) => {
+    setAddress(data.address)
+    setIsAddressValid(true)
+  }
+
+  const toggleHandler = () => {
+    setIsOpen((prevOpenState) => !prevOpenState)
+  }
+
+  const onSubmit = () => {
+    navigate(`/login`)
+  }
+
+  const onClickLoginButton = () => {
+    navigate(`/login`)
+  }
+
+  // 추후 백엔드 연동할때 url 수정
+  const onClickDuplicateCheckButton = () => {
+    fetch('http://localhost:8080/users/check', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        loginId: loginId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result) {
+          setIsLoginIdValid(true)
+          alert('사용가능한 아이디입니다.')
+        } else {
+          alert('중복된 아이디입니다.')
+        }
+      })
+      .catch((error) => console.error('Error:', error))
+  }
+
   return (
     <div>
       <GlobalStyle />
@@ -14,60 +167,77 @@ function SignUpPage() {
           <ContentWrap>
             <TextWrap>닉네임</TextWrap>
             <InputWrap>
-              <input placeholder="닉네임을 입력하세요"></input>
-              <button>중복확인</button>
+              <input
+                placeholder="닉네임을 입력하세요"
+                value={nickname}
+                onChange={onChangeNickname}></input>
             </InputWrap>
+            <CheckTextWrap className={isNicknameValid ? 'success' : 'error'}>
+              {nicknameMsg}
+            </CheckTextWrap>
           </ContentWrap>
           <ContentWrap>
             <TextWrap>아이디</TextWrap>
             <InputWrap>
-              <input placeholder="아이디를 입력하세요"></input>
+              <input
+                placeholder="아이디를 입력하세요"
+                value={loginId}
+                onChange={handleLoginIdChange}></input>
+              <button onClick={onClickDuplicateCheckButton}>중복확인</button>
             </InputWrap>
           </ContentWrap>
           <ContentWrap>
             <TextWrap>이메일</TextWrap>
             <InputWrap>
-              <input placeholder="이메일을 입력하세요"></input>
+              <input
+                placeholder="이메일을 입력하세요"
+                value={email}
+                onChange={onChangeEmail}></input>
             </InputWrap>
+            <CheckTextWrap className={isEmailValid ? 'success' : 'error'}>{emailMsg}</CheckTextWrap>
           </ContentWrap>
           <ContentWrap>
             <TextWrap>비밀번호</TextWrap>
             <InputWrap>
-              <input placeholder="비밀번호를 입력하세요"></input>
+              <input
+                type="password"
+                placeholder="비밀번호를 입력하세요"
+                value={password}
+                onChange={onChangePwd}></input>
             </InputWrap>
+            <CheckTextWrap className={isPwdValid ? 'success' : 'error'}>{pwdMsg}</CheckTextWrap>
           </ContentWrap>
           <ContentWrap>
             <TextWrap>비밀번호 확인</TextWrap>
             <InputWrap>
-              <input placeholder="비밀번호를 다시 한번 확인하세요"></input>
+              <input
+                type="password"
+                placeholder="비밀번호를 다시 한번 확인하세요"
+                value={confirmPwd}
+                onChange={onChangeConfirmPwd}></input>
             </InputWrap>
+            <CheckTextWrap className={isConfirmPwd ? 'success' : 'error'}>
+              {confirmPwdMsg}
+            </CheckTextWrap>
           </ContentWrap>
           <AddressWrap>
             <TextWrap>주소</TextWrap>
             <Div>
               <InputAddressWrap>
-                <input placeholder="주소를 입력하세요"></input>
+                <input placeholder="주소를 입력하세요" value={address}></input>
               </InputAddressWrap>
-              <BtnWrap>우편번호 검색</BtnWrap>
+              <BtnWrap onClick={toggleHandler}>우편번호 검색</BtnWrap>
             </Div>
-            <InputDetailAddressWrap>
-              <input placeholder="상세주소를 입력하세요"></input>
-            </InputDetailAddressWrap>
+            <PostalCodeModal isOpen={isOpen} onClose={toggleHandler} onComplete={completeHandler} />
           </AddressWrap>
-          <SignUpBtn>회원가입 하기</SignUpBtn>
+          <SignUpBtn onClick={onSubmit} type="submit" disabled={!isAllValid}>
+            회원가입 하기
+          </SignUpBtn>
           <LoginWrap>
             <p style={{ fontSize: '20px', color: '#B9B9B9', margin: '0 20px 0 20px' }}>
               이미 회원이신가요?
             </p>
-            <p
-              style={{
-                fontWeight: 'bold',
-                fontSize: '22px',
-                color: '#005E92',
-                margin: '0 20px 0 20px',
-              }}>
-              로그인 하기
-            </p>
+            <LoginButton onClick={onClickLoginButton}>로그인 하기</LoginButton>
           </LoginWrap>
         </ModalWrap>
       </Container>
@@ -182,6 +352,7 @@ const InputWrap = styled.div`
     font-style: normal;
     font-weight: bold;
     margin-right: 20px;
+    cursor: pointer;
   }
 `
 
@@ -203,7 +374,7 @@ const Div = styled.div`
 const InputAddressWrap = styled.div`
   display: flex;
   flex-direction: row;
-  width: 221px;
+  width: 420px;
   height: 54px;
   border-radius: 30px;
   background: #f5f5f5;
@@ -229,66 +400,56 @@ const InputAddressWrap = styled.div`
   }
 `
 
-const BtnWrap = styled.div`
+const BtnWrap = styled.button`
   display: flex;
   width: 150px;
   height: 43px;
-  border: solid 1px #b9b9b9;
+  border: solid 1px #dbdbdb;
   border-radius: 30px;
   color: #898585;
+  background-color: #ffffff;
   font-family: Kite One;
   font-size: 18px;
   align-items: center;
   justify-content: center;
   margin-left: 10px;
+  cursor: pointer;
 `
 
-const InputDetailAddressWrap = styled.div`
-  display: flex;
-  width: 505px;
-  height: 54px;
-  flex-shrink: 0;
-  border-radius: 30px;
-  background: #f5f5f5;
-  align-items: center;
-
-  input {
-    width: 100%;
-    height: 100%;
-    font-family: Kite One;
-    font-size: 20px;
-    font-style: normal;
-    border: none;
-    outline: none;
-    padding: 0 15px; // 더 나은 모양을 위해 패딩 추가
-    background: transparent; // input 자체의 배경도 투명으로 설정
-
-    &::placeholder {
-      color: #b9b9b9;
-      font-family: Kite One;
-      font-size: 20px;
-      font-style: normal;
-      font-weight: 400;
-    }
-  }
-`
-
-const SignUpBtn = styled.div`
+const SignUpBtn = styled.button`
   display: flex;
   flex-direction: column;
   width: 505px;
   height: 54px;
   color: #fff;
+  border: none;
   font-size: 20px;
   font-weight: bold;
   text-align: center;
   align-items: center;
   justify-content: center;
   border-radius: 30px;
-  background: #5dc5ff;
   margin: 20px;
+  background: ${({ disabled }) => (disabled ? '#ccc' : '#5dc5ff')};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `
 const LoginWrap = styled.div`
   display: flex;
   flex-direction: row;
+`
+
+const CheckTextWrap = styled.span`
+  color: #5dc5ff;
+  margin-left: 20px;
+  margin-top: 5px;
+`
+
+const LoginButton = styled.button`
+  font-weight: bold;
+  font-size: 22px;
+  color: #005e92;
+  margin: 0 20px 0 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
 `

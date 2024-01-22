@@ -5,6 +5,7 @@ import SignUpPage from './pages/SignUpPage'
 import LoginPage from './pages/LoginPage'
 import ProductRegisterPage from './pages/ProductRegisterPage'
 import MyPostPage from './pages/MyPostPage'
+import MyPage from './pages/MyPage'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             />
           }
         />
+        <Route path="/MyPage" element={<MyPage />} />
       </Routes>
     </Router>
   )
