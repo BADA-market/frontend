@@ -15,6 +15,10 @@ const Header: React.FC = () => {
     setSearchInput('')
   }
 
+  const onClickProductRegisterButton = () => {
+    navigate('/ProductRegisterPage')
+  }
+
   const onClickMypageButton = () => {
     navigate('/mypage')
   }
@@ -36,7 +40,7 @@ const Header: React.FC = () => {
           <ClearIcon onClick={handleClearInput}>x</ClearIcon>
         </InputWrap>
         <ButtonWrap>
-          <Button>판매하기</Button>
+          <Button onClick={onClickProductRegisterButton}>판매하기</Button>
           <Button onClick={onClickMypageButton}>마이페이지</Button>
           <Button>대화하기</Button>
         </ButtonWrap>
