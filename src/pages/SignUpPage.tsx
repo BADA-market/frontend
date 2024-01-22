@@ -3,6 +3,7 @@ import styled, { createGlobalStyle } from 'styled-components'
 import Logo from '../assets/images/BADA.png'
 import PostalCodeModal from '../components/PostalCodeModal'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 // interface SignUpProps {}
 
 function SignUpPage() {
@@ -134,19 +135,13 @@ function SignUpPage() {
     navigate(`/login`)
   }
 
-  // 추후 백엔드 연동할때 url 수정
   const onClickDuplicateCheckButton = () => {
-    fetch('http://localhost:8080/users/check', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    axios
+      .post('http://localhost:8080/users/check', {
         loginId: loginId,
-      }),
-    })
-      .then((response) => response.json())
-      .then((result) => {
+      })
+      .then((response) => {
+        const result = response.data
         if (result) {
           setIsLoginIdValid(true)
           alert('사용가능한 아이디입니다.')
@@ -154,7 +149,9 @@ function SignUpPage() {
           alert('중복된 아이디입니다.')
         }
       })
-      .catch((error) => console.error('Error:', error))
+      .catch((error) => {
+        console.error('Error:', error)
+      })
   }
 
   return (

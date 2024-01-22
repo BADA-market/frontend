@@ -11,25 +11,35 @@ const Header: React.FC = () => {
     setSearchInput(event.target.value)
   }
 
+  const handleLogoBtnClick = () => {
+    navigate('/')
+  }
+
+  const handleLoginBtnClick = () => {
+    navigate('/login')
+  }
+
   const handleClearInput = () => {
     setSearchInput('')
   }
 
-  const onClickProductRegisterButton = () => {
+  const handleProductRegisterBtnClick = () => {
     navigate('/ProductRegisterPage')
   }
 
-  const onClickMypageButton = () => {
+  const handleMypageBtnClick = () => {
     navigate('/mypage')
   }
 
   return (
     <Container>
       <SubHeader>
-        <A href="/sign_up">로그인/회원가입</A>
+        <LoginButton onClick={handleLoginBtnClick}>로그인/회원가입</LoginButton>
       </SubHeader>
       <MainHeader>
-        <Img src={Logo} alt="Logo" />
+        <LogoBtn onClick={handleLogoBtnClick}>
+          <Img src={Logo} alt="Logo" />
+        </LogoBtn>
         <InputWrap>
           <Input
             type="text"
@@ -40,8 +50,8 @@ const Header: React.FC = () => {
           <ClearIcon onClick={handleClearInput}>x</ClearIcon>
         </InputWrap>
         <ButtonWrap>
-          <Button onClick={onClickProductRegisterButton}>판매하기</Button>
-          <Button onClick={onClickMypageButton}>마이페이지</Button>
+          <Button onClick={handleProductRegisterBtnClick}>판매하기</Button>
+          <Button onClick={handleMypageBtnClick}>마이페이지</Button>
           <Button>대화하기</Button>
         </ButtonWrap>
       </MainHeader>
@@ -125,11 +135,26 @@ const Button = styled.button`
   cursor: pointer;
 `
 
-const A = styled.a`
+const LogoBtn = styled.button`
   display: flex;
-  align-left: auto;
-  text-decoration: none;
-  color: black;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  flex-shrink: 0;
+  border: none;
+  padding: 0;
+  background-color: #ffffff;
+  cursor: pointer;
+`
+
+const LoginButton = styled.button`
+  font-size: 15px;
+  color: #000000;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
 `
 
 export default Header
