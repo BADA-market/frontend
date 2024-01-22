@@ -1,12 +1,53 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import Logo from '../assets/images/BADA.png'
 import Kakao from '../assets/images/kakao.png'
 import Naver from '../assets/images/naver.png'
 import Google from '../assets/images/google.png'
+import { useNavigate } from 'react-router-dom'
 // interface LoginProps {}
 
 function LoginPage() {
+  const navigate = useNavigate()
+  const [loginId, setLoginId] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleChangeLoginId = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLoginId(event.target.value)
+  }
+
+  const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value)
+  }
+
+  const handleSignupBtnClick = () => {
+    navigate('/sign_up')
+  }
+
+  // 추후 백엔드 연동할때 url 수정
+  const handleLoginBtnClick = () => {
+    fetch('http://localhost:8080/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        loginId: loginId,
+        password: password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result) {
+          alert('로그인 성공.')
+          navigate('/')
+        } else {
+          alert('로그인 실패')
+        }
+      })
+      .catch((error) => console.error('Error:', error))
+  }
+
   return (
     <div>
       <GlobalStyle />
@@ -18,29 +59,21 @@ function LoginPage() {
           <ContentWrap>
             <TextWrap>아이디</TextWrap>
             <InputWrap>
-              <input placeholder="아이디를 입력하세요"></input>
+              <input placeholder="아이디를 입력하세요" onChange={handleChangeLoginId}></input>
             </InputWrap>
           </ContentWrap>
           <ContentWrap>
             <TextWrap>비밀번호</TextWrap>
             <InputWrap>
-              <input placeholder="비밀번호를 입력하세요"></input>
+              <input placeholder="비밀번호를 입력하세요" onChange={handleChangePassword}></input>
             </InputWrap>
           </ContentWrap>
-          <LoginBtn>로그인 하기</LoginBtn>
+          <LoginBtn onClick={handleLoginBtnClick}>로그인 하기</LoginBtn>
           <SignUpWrap>
             <p style={{ fontSize: '20px', color: '#B9B9B9', margin: '0 20px 0 20px' }}>
               회원이 아니신가요?
             </p>
-            <p
-              style={{
-                fontWeight: 'bold',
-                fontSize: '22px',
-                color: '#005E92',
-                margin: '0 20px 0 20px',
-              }}>
-              회원가입 하기
-            </p>
+            <SignUpBtn onClick={handleSignupBtnClick}>회원가입 하기</SignUpBtn>
           </SignUpWrap>
           <KakaoLogin>
             <KakaoLogo src={Kakao} alt="Logo" />
@@ -123,7 +156,8 @@ const TextWrap = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 20px;
-  margin-left: 15px;
+  margin-left: 20px;
+  margin-bottom: 8px;
 `
 const InputWrap = styled.div`
   display: flex;
@@ -170,7 +204,7 @@ const InputWrap = styled.div`
   }
 `
 
-const LoginBtn = styled.div`
+const LoginBtn = styled.button`
   display: flex;
   flex-direction: column;
   width: 505px;
@@ -184,13 +218,25 @@ const LoginBtn = styled.div`
   border-radius: 30px;
   background: #5dc5ff;
   margin: 20px;
+  border: none;
+  cursor: pointer;
 `
 const SignUpWrap = styled.div`
   display: flex;
   flex-direction: row;
 `
 
-const KakaoLogin = styled.div`
+const SignUpBtn = styled.button`
+  font-weight: bold;
+  font-size: 22px;
+  color: #005e92;
+  margin: 0 20px 0 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+`
+
+const KakaoLogin = styled.button`
   display: flex;
   width: 400px;
   height: 56px;
@@ -203,9 +249,11 @@ const KakaoLogin = styled.div`
   box-shadow: 0px 1.756px 3.513px 0px rgba(0, 0, 0, 0.25), 0px 0px 0px 0px rgba(0, 0, 0, 0.08);
   font-size: 20px;
   font-weight: bold;
+  border: none;
+  cursor: pointer;
 `
 
-const NaverLogin = styled.div`
+const NaverLogin = styled.button`
   display: flex;
   width: 400px;
   height: 56px;
@@ -218,9 +266,11 @@ const NaverLogin = styled.div`
   font-size: 20px;
   color: #fff;
   font-weight: bold;
+  border: none;
+  cursor: pointer;
 `
 
-const GoogleLogin = styled.div`
+const GoogleLogin = styled.button`
   display: flex;
   width: 400px;
   height: 56px;
@@ -232,6 +282,8 @@ const GoogleLogin = styled.div`
   box-shadow: 0px 1.756px 3.513px 0px rgba(0, 0, 0, 0.25), 0px 0px 0px 0px rgba(0, 0, 0, 0.08);
   font-size: 20px;
   font-weight: bold;
+  border: none;
+  cursor: pointer;
 `
 
 const KakaoLogo = styled.img`
