@@ -32,15 +32,11 @@ function LoginPage() {
         password: password,
       })
       .then((response) => {
-        if (response.data) {
-          alert('로그인 성공.')
-          navigate('/')
-        } else {
-          alert('로그인 실패')
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error)
+        var Bearer = 'Bearer '
+        var accessToken = Bearer.concat(response.data.access)
+        localStorage.setItem('accessToken', accessToken)
+        console.log('[accessToken]: ', accessToken)
+        navigate('/')
       })
   }
 
