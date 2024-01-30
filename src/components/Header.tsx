@@ -3,6 +3,11 @@ import styled from 'styled-components'
 import Logo from '../assets/images/BADA.png'
 
 const Header: React.FC = () => {
+  const handleChatButtonClick = () => {
+    // '대화하기' 버튼을 눌렀을 때 Chat 페이지로 이동
+    window.location.href = '/chat'
+  }
+
   return (
     <Container>
       <SubHeader>
@@ -16,7 +21,7 @@ const Header: React.FC = () => {
         <ButtonWrap>
           <Button1>판매하기</Button1>
           <Button2>마이페이지</Button2>
-          <Button3>대화하기</Button3>
+          <Button3 onClick={handleChatButtonClick}>대화하기</Button3>
         </ButtonWrap>
       </MainHeader>
     </Container>
