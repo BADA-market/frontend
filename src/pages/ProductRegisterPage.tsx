@@ -36,30 +36,30 @@ const ProductRegisterPage: React.FC = () => {
   const descriptionRef = useRef<HTMLInputElement>(null)
   const dealLocationRef = useRef<HTMLInputElement>(null)
 
-  // const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
-  //   const file = event.target.files?.[0]
-  //   if (file) {
-  //     const imageUrl = URL.createObjectURL(file)
-  //     setProductImage(imageUrl)
-  //   }
-  // }
-
   const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        const base64String = reader.result?.toString() || null
-        setProductImage(base64String)
-
-        // 이 부분에서 이미지를 Base64로 인코딩하여 localStorage에 저장
-        if (base64String) {
-          localStorage.setItem('latestPostImage', base64String)
-        }
-      }
-      reader.readAsDataURL(file)
+      const imageUrl = URL.createObjectURL(file)
+      setProductImage(imageUrl)
     }
   }
+
+  // const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
+  //   const file = event.target.files?.[0]
+  //   if (file) {
+  //     const reader = new FileReader()
+  //     reader.onloadend = () => {
+  //       const base64String = reader.result?.toString() || null
+  //       setProductImage(base64String)
+
+  //       // 이 부분에서 이미지를 Base64로 인코딩하여 localStorage에 저장
+  //       if (base64String) {
+  //         localStorage.setItem('latestPostImage', base64String)
+  //       }
+  //     }
+  //     reader.readAsDataURL(file)
+  //   }
+  // }
 
   const handleCategoryButtonClick = (category: string) => {
     setSelectedCategories((prevCategories) => {
@@ -102,16 +102,16 @@ const ProductRegisterPage: React.FC = () => {
       console.log('누락된 필드가 있습니다:', missingFieldsArray)
     } else {
       console.log('상품 등록 완료!', productName, productImage, price, description, dealLocation)
-      //localStorage에 저장
-      const newPostData = {
-        productName,
-        productImage,
-        price,
-        description,
-        dealLocation,
-      }
+      // //localStorage에 저장
+      // const newPostData = {
+      //   productName,
+      //   productImage,
+      //   price,
+      //   description,
+      //   dealLocation,
+      // }
 
-      localStorage.setItem('latestPostData', JSON.stringify(newPostData))
+      // localStorage.setItem('latestPostData', JSON.stringify(newPostData))
 
       navigate(
         `/MyPostPage?productName=${productName}&productImage=${productImage}&price=${price}&description=${description}&dealLocation=${dealLocation}`,

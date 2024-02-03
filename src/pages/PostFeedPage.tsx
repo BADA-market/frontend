@@ -1,74 +1,40 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-
-interface Post {
-  id: number
-  productName: string
-  productImage: string | null
-  price: string
-  dealLocation: string
-}
+import { dummyPosts } from '../Dummy/DummyPost'
+import filledHeartIcon from '/Users/haeun/Desktop/bada/frontend/src/assets/images/Icon/myheart.png'
+import emptyHeartIcon from '/Users/haeun/Desktop/bada/frontend/src/assets/images/Icon/heart.png'
 
 const PostFeedPage: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([])
-  // const [sorting, setSorting] = useState<'등록순' | '인기순' | '카테고리'>('등록순')
+  const [likedPosts, setLikedPosts] = useState<number[]>([])
 
-  useEffect(() => {
-    // localStorage에서 최신 게시물 데이터를 불러오기
-    const latestPostDataString = localStorage.getItem('latestPostData')
-
-    if (latestPostDataString) {
-      const latestPostData = JSON.parse(latestPostDataString)
-      const newPost: Post = {
-        id: Date.now(),
-        productName: latestPostData.productName,
-        productImage: latestPostData.productImage,
-        price: latestPostData.price,
-        dealLocation: latestPostData.dealLocation,
-      }
-
-      // 이전에 localStorage에 저장된 기존 데이터들을 불러오기
-      const existingDataString = localStorage.getItem('posts')
-      let updatedPosts = []
-
-      if (existingDataString) {
-        const existingData = JSON.parse(existingDataString)
-
-        // 중복된 게시물인지 확인
-        const isDuplicatePost = existingData.some(
-          (post: Post) => post.productName === newPost.productName && post.price === newPost.price,
-        )
-
-        if (!isDuplicatePost) {
-          // 중복된 게시물이 없을 경우, 최신 데이터를 추가하고 localStorage에 저장
-          updatedPosts = [...existingData, newPost]
-          setPosts(updatedPosts)
-          localStorage.setItem('posts', JSON.stringify(updatedPosts))
-        }
-      } else {
-        // 저장된 기존 데이터가 없을 경우, 최신 데이터만 표시
-        updatedPosts = [newPost]
-        localStorage.setItem('posts', JSON.stringify([newPost]))
-      }
+  const handleLikeClick = (postId: number) => {
+    if (likedPosts.includes(postId)) {
+      setLikedPosts(likedPosts.filter((id) => id !== postId))
+    } else {
+      setLikedPosts([...likedPosts, postId])
     }
-  }, [])
+  }
 
   return (
     <PageContainer>
-      <SortOptions>
-        <SortOption>등록순</SortOption>
-        <SortOption>인기순</SortOption>
-        <SortOption>카테고리</SortOption>
-      </SortOptions>
       <PostContainer>
-        {posts.map((post) => (
+        {dummyPosts.map((post) => (
           <PostItem key={post.id}>
             <PostImage>
-              <img src={post.productImage || ''} alt="Product" />
+              <img src={`${import.meta.env.BASE_URL}${post.productImage}`} alt="Product" />
             </PostImage>
             <PostTitle>{post.productName}</PostTitle>
             <PostPrice>{post.price}</PostPrice>
             <PostDealLocation>{post.dealLocation}</PostDealLocation>
+            <LikeButton
+              onClick={() => handleLikeClick(post.id)}
+              liked={likedPosts.includes(post.id)}>
+              {likedPosts.includes(post.id) ? (
+                <img src={filledHeartIcon} alt="Filled Heart" />
+              ) : (
+                <img src={emptyHeartIcon} alt="Empty Heart" />
+              )}
+            </LikeButton>
           </PostItem>
         ))}
       </PostContainer>
@@ -85,16 +51,6 @@ const PageContainer = styled.div`
   width: 100%;
 `
 
-const SortOptions = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-`
-
-const SortOption = styled.span`
-  cursor: pointer;
-`
-
 const PostContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -109,6 +65,7 @@ const PostItem = styled.div`
   border: 1px solid #e0e0e0;
   border-radius: 10px;
   overflow: hidden;
+  position: relative;
 `
 
 const PostImage = styled.div`
@@ -116,6 +73,7 @@ const PostImage = styled.div`
     width: 100%;
     height: 150px;
     object-fit: cover;
+    margin-bottom: 10px;
   }
 `
 
@@ -139,4 +97,17 @@ const PostDealLocation = styled.div`
   margin: 10px;
 `
 
+const LikeButton = styled.button<{ liked: boolean }>`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  img {
+    width: 24px;
+    height: 24px;
+  }
+`
 export default PostFeedPage
