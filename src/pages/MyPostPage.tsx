@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -14,27 +14,39 @@ interface MyPostPageProps {
 const MyPostPage: React.FC<MyPostPageProps> = () => {
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
+  const [imageData, setImageData] = useState<string | null>(null)
 
   const productName = searchParams.get('productName') || ''
-  const productImage = searchParams.get('productImage') || ''
   const price = searchParams.get('price') || ''
   const description = searchParams.get('description') || ''
   const dealLocation = searchParams.get('dealLocation') || ''
   const category = searchParams.get('category') || ''
+
+  useEffect(() => {
+    const storedImageData = localStorage.getItem('latestPostImage')
+    console.log(storedImageData)
+
+    // 이미지 데이터가 없는 경우 처리
+    if (storedImageData) {
+      setImageData(storedImageData)
+    } else {
+      setImageData(null) // 또는 다른 처리 방식 선택
+    }
+  }, [])
 
   // 수정 버튼이 굳이 필요한가?
   // const handleEdit = () => {
   //   navigate(`/ProductRegisterPage?`)
   // }
 
-  //삭제 눌렀을 때 어디로 돌아갈 지 정하기
+  //삭제 눌렀을 때 어디로 돌아갈 지 정하기 ->> 홈으로 가자
   const handleDelete = () => {}
 
   return (
     <PageContainer>
       <FormContainer>
         <FileInputContainer>
-          <PreviewImage src={productImage} alt="Product" />
+          {imageData ? <PreviewImage src={`${imageData}`} alt="Product" /> : <span>No Image</span>}
         </FileInputContainer>
         <span>{dealLocation}</span>
 

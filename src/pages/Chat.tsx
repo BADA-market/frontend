@@ -1,6 +1,6 @@
 import React from 'react'
 
-function TestPage() {
+function Chat() {
   return (
     <div>
       <h1>테스트 페이지임</h1>
@@ -9,4 +9,4 @@ function TestPage() {
   )
 }
 
-export default TestPage
+export default Chat
