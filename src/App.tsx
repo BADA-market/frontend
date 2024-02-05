@@ -5,6 +5,7 @@ import SignUpPage from './pages/SignUpPage'
 import LoginPage from './pages/LoginPage'
 import ProductRegisterPage from './pages/ProductRegisterPage'
 import MyPostPage from './pages/MyPostPage'
+import MyPage from './pages/MyPage'
 import PostFeedPage from './pages/PostFeedPage'
 import Posts from './components/Posts'
 import Chat from './pages/Chat'
@@ -36,6 +37,7 @@ function App() {
           />
           <Route path="/Posts" element={<Posts />} />
           <Route path="/Chat" element={<Chat />} />
+          <Route path="/MyPage" element={<MyPage />} />
         </Routes>
       </Router>
     </div>

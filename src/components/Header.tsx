@@ -1,27 +1,58 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Logo from '../assets/images/BADA.png'
+import { useNavigate } from 'react-router-dom'
 
 const Header: React.FC = () => {
-  const handleChatButtonClick = () => {
-    // '대화하기' 버튼을 눌렀을 때 Chat 페이지로 이동
-    window.location.href = '/chat'
+  const navigate = useNavigate()
+  const [searchInput, setSearchInput] = useState('')
+
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(event.target.value)
+  }
+
+  const handleLogoBtnClick = () => {
+    navigate('/')
+  }
+
+  const handleLoginBtnClick = () => {
+    navigate('/login')
+  }
+
+  const handleClearInput = () => {
+    setSearchInput('')
+  }
+
+  const handleProductRegisterBtnClick = () => {
+    navigate('/ProductRegisterPage')
+  }
+
+  const handleMypageBtnClick = () => {
+    navigate('/mypage')
   }
 
   return (
     <Container>
       <SubHeader>
-        <P>로그인/회원가입</P>
+        <LoginButton onClick={handleLoginBtnClick}>로그인/회원가입</LoginButton>
       </SubHeader>
       <MainHeader>
-        <Img src={Logo} alt="Logo" />
+        <LogoBtn onClick={handleLogoBtnClick}>
+          <Img src={Logo} alt="Logo" />
+        </LogoBtn>
         <InputWrap>
-          <Input type="text" placeholder="원하는 물품이나 동네를 검색하세요." />
+          <Input
+            type="text"
+            placeholder="원하는 물품이나 동네를 검색하세요."
+            value={searchInput}
+            onChange={handleChangeInput}
+          />
+          <ClearIcon onClick={handleClearInput}>x</ClearIcon>
         </InputWrap>
         <ButtonWrap>
-          <Button1>판매하기</Button1>
-          <Button2>마이페이지</Button2>
-          <Button3 onClick={handleChatButtonClick}>대화하기</Button3>
+          <Button onClick={handleProductRegisterBtnClick}>판매하기</Button>
+          <Button onClick={handleMypageBtnClick}>마이페이지</Button>
+          <Button>대화하기</Button>
         </ButtonWrap>
       </MainHeader>
     </Container>
@@ -53,18 +84,6 @@ const Img = styled.img`
   height: 40px; /* 높이를 적절하게 조절해주세요 */
 `
 
-const InputWrap = styled.div`
-  display: flex;
-  align-item: center;
-  flex: 1;
-  margin: 0 10px;
-  width: 500px;
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 30px;
-  background: #f3f3f3;
-`
-
 const Input = styled.input`
   font-size: 18px;
   width: 450px;
@@ -72,8 +91,29 @@ const Input = styled.input`
   border: none;
   border-radius: 30px;
   background: transparent;
-  padding: 0 20px;
+  padding: 0 30px;
   outline: none;
+`
+
+const ClearIcon = styled.span`
+  font-size: 18px;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+`
+
+const InputWrap = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 0 10px;
+  width: 640px;
+  height: 50px;
+  flex-shrink: 0;
+  border-radius: 30px;
+  background: #f3f3f3;
 `
 
 const ButtonWrap = styled.div`
@@ -81,7 +121,7 @@ const ButtonWrap = styled.div`
   gap: 20px;
 `
 
-const Button = styled.div`
+const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,17 +129,32 @@ const Button = styled.div`
   height: 40px;
   flex-shrink: 0;
   border-radius: 30px;
+  border: none;
   background: #def3ff;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  cursor: pointer;
 `
 
-const Button1 = styled(Button)``
-const Button2 = styled(Button)``
-const Button3 = styled(Button)``
-
-const P = styled.p`
+const LogoBtn = styled.button`
   display: flex;
-  align-left: auto;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  flex-shrink: 0;
+  border: none;
+  padding: 0;
+  background-color: #ffffff;
+  cursor: pointer;
+`
+
+const LoginButton = styled.button`
+  font-size: 15px;
+  color: #000000;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
 `
 
 export default Header
