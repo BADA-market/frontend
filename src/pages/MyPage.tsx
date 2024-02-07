@@ -1,11 +1,46 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { item } from '../components/Item'
+import axios from 'axios'
 
 function MyPage() {
-  const [selectedMenu, setSelectedMenu] = useState<number | null>(null)
+  const [requestUrl, setRequestUrl] = useState('http://localhost:8080/user/item')
+  const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(null)
+  const [itemList, setItemList] = useState<item[]>([])
+  const selectMenu = ['내 상품', '찜 목록', '내 후기', '거래내역']
+
+  useEffect(() => {
+    fetchItemList()
+  }, [])
+
+  const fetchItemList = () => {
+    axios
+      .get<item[]>(requestUrl, {
+        headers: { Authorization: localStorage.getItem('accessToken') },
+      })
+      .then((response) => {
+        setItemList(response.data)
+      })
+      .catch((error) => console.error('Error fetching item list:', error))
+  }
 
   const handleMenuClick = (menuIndex: number) => {
-    setSelectedMenu(menuIndex)
+    setSelectedMenuIndex(menuIndex)
+    switch (menuIndex) {
+      case 0:
+        setRequestUrl('http://localhost:8080/user/item')
+        break
+      case 1:
+        setRequestUrl('http://localhost:8080/user/like')
+        break
+      case 2:
+        setRequestUrl('http://localhost:8080/user/review')
+        break
+      case 3:
+        setRequestUrl('http://localhost:8080/user/trade')
+        break
+    }
+    fetchItemList()
   }
 
   return (
@@ -23,19 +58,19 @@ function MyPage() {
         </ProfileInfoWrap>
       </ProfileWrap>
       <MenuContainer>
-        {['내 상품', '찜 목록', '내 후기', '거래내역'].map((menu, index) => (
+        {selectMenu.map((menu, index) => (
           <MenuItem
             key={index}
-            isSelected={selectedMenu === index}
+            isSelected={selectedMenuIndex === index}
             onClick={() => handleMenuClick(index)}>
             {menu}
           </MenuItem>
         ))}
       </MenuContainer>
 
-      {selectedMenu !== null && (
+      {selectedMenuIndex !== null && (
         <MenuList>
-          <p>List for {['내 상품', '찜 목록', '내 후기', '거래내역'][selectedMenu]}</p>
+          <p>${itemList[0].title}</p>
         </MenuList>
       )}
     </div>
