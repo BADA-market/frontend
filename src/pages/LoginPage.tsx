@@ -32,8 +32,7 @@ function LoginPage() {
         password: password,
       })
       .then((response) => {
-        var Bearer = 'Bearer '
-        var accessToken = Bearer.concat(response.data.Authorization)
+        var accessToken = response.headers['Authorization']
         localStorage.setItem('accessToken', accessToken)
         console.log('[accessToken]: ', accessToken)
         navigate('/')
