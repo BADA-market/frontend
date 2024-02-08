@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { dummyPosts } from '../Dummy/DummyPost'
-import filledHeartIcon from '/Users/haeun/Desktop/bada/frontend/src/assets/images/Icon/myheart.png'
-import emptyHeartIcon from '/Users/haeun/Desktop/bada/frontend/src/assets/images/Icon/heart.png'
+import filledHeartIcon from '../assets/images/Icon/myheart.png'
+import emptyHeartIcon from '../assets/images/Icon/heart.png'
 
 const PostFeedPage: React.FC = () => {
   const [likedPosts, setLikedPosts] = useState<number[]>([])
