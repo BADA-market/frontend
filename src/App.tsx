@@ -10,14 +10,15 @@ import PostFeedPage from './pages/PostFeedPage'
 import Posts from './components/Posts'
 import Chat from './pages/Chat'
 import Header from './components/Header'
+import ReviewPage from './pages/ReviewPage'
 
 function App() {
   return (
     <div>
-      <Header />
       <Router>
+        <Header />
         <Routes>
-          <Route path="/" element={<TestPage />} />
+          <Route path="/" element={<PostFeedPage />} />
           <Route path="/sign_up" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/ProductRegister" element={<ProductRegisterPage />} />
@@ -38,6 +39,7 @@ function App() {
           <Route path="/Posts" element={<Posts />} />
           <Route path="/Chat" element={<Chat />} />
           <Route path="/MyPage" element={<MyPage />} />
+          <Route path="/review" element={<ReviewPage />} />
         </Routes>
       </Router>
     </div>
