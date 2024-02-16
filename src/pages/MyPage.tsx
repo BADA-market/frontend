@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { item } from '../components/Item'
+import { item } from '../components/mypage/Item'
 import axios from 'axios'
 
 function MyPage() {
@@ -28,16 +28,16 @@ function MyPage() {
     setSelectedMenuIndex(menuIndex)
     switch (menuIndex) {
       case 0:
-        setRequestUrl('http://localhost:8080/user/item')
+        setRequestUrl('http://localhost:8080/user/item') // 내가 올린 상품 목록
         break
       case 1:
-        setRequestUrl('http://localhost:8080/user/like')
+        setRequestUrl('http://localhost:8080/item/myLikes/{userId}') // 찜 목록
         break
       case 2:
-        setRequestUrl('http://localhost:8080/user/review')
+        setRequestUrl('http://localhost:8080/review/search/post/{buyerId}') // 내가 남긴 거래후기 목록
         break
       case 3:
-        setRequestUrl('http://localhost:8080/user/trade')
+        setRequestUrl('http://localhost:8080/trades/sell/{sellerId}') // 판매 목록
         break
     }
     fetchItemList()
