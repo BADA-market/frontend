@@ -2,6 +2,7 @@ import React, { ChangeEvent, useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import CameraIcon from '../assets/images/camera.png'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const categories: string[] = [
   '디지털기기',
@@ -18,31 +19,23 @@ const categories: string[] = [
   '기타',
 ]
 
-const dealLocationOptions: string[] = ['내 위치', '최근 지역', '주소 검색', '지역 설정 안함']
+const hopeLocationOptions: string[] = ['내 위치', '최근 지역', '주소 검색', '지역 설정 안함']
 
-const ProductRegisterPage: React.FC = () => {
+const ProductRegister: React.FC = () => {
   const navigate = useNavigate()
 
-  const [productName, setProductName] = useState('')
-  const [productImage, setProductImage] = useState<string | null>(null)
+  const [title, settitle] = useState('')
+  const [product_url, setproduct_url] = useState<string | null>(null)
   const [price, setPrice] = useState('')
   const [description, setDescription] = useState('')
-  const [dealLocation, setDealLocation] = useState('')
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [hopeLocation, sethopeLocation] = useState('')
+  const [category, setcategory] = useState<string[]>([])
   const [missingFields, setMissingFields] = useState<string[]>([])
 
-  const productNameRef = useRef<HTMLInputElement>(null)
+  const titleRef = useRef<HTMLInputElement>(null)
   const priceRef = useRef<HTMLInputElement>(null)
   const descriptionRef = useRef<HTMLInputElement>(null)
-  const dealLocationRef = useRef<HTMLInputElement>(null)
-
-  // const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
-  //   const file = event.target.files?.[0]
-  //   if (file) {
-  //     const imageUrl = URL.createObjectURL(file)
-  //     setProductImage(imageUrl)
-  //   }
-  // }
+  const hopeLocationRef = useRef<HTMLInputElement>(null)
 
   const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0]
@@ -62,7 +55,7 @@ const ProductRegisterPage: React.FC = () => {
   }
 
   const handleCategoryButtonClick = (category: string) => {
-    setSelectedCategories((prevCategories) => {
+    setcategory((prevCategories) => {
       if (prevCategories.includes(category)) {
         return prevCategories.filter((c) => c !== category)
       } else {
@@ -71,8 +64,8 @@ const ProductRegisterPage: React.FC = () => {
     })
   }
 
-  const handleDealLocationButtonClick = (location: string) => {
-    setDealLocation(location)
+  const handlehopeLocationButtonClick = (location: string) => {
+    sethopeLocation(location)
   }
 
   const handleCameraIconClick = () => {
@@ -84,10 +77,10 @@ const ProductRegisterPage: React.FC = () => {
     const firstMissingField = getFirstMissingField()
     if (firstMissingField) {
       const refObject: Record<string, React.RefObject<HTMLInputElement>> = {
-        productName: productNameRef,
+        title: titleRef,
         price: priceRef,
         description: descriptionRef,
-        dealLocation: dealLocationRef,
+        hopeLocation: hopeLocationRef,
       }
       refObject[firstMissingField]?.current?.focus()
     }
@@ -101,31 +94,49 @@ const ProductRegisterPage: React.FC = () => {
       focusOnFirstMissingField()
       console.log('누락된 필드가 있습니다:', missingFieldsArray)
     } else {
-      console.log('상품 등록 완료!', productName, productImage, price, description, dealLocation)
-      navigate(
-        `/MyPostPage?productName=${productName}&productImage=${productImage}&price=${price}&description=${description}&dealLocation=${dealLocation}`,
-      )
+      console.log('상품 등록 완료!', title, product_url, price, description, hopeLocation)
+      axios
+        .post(
+          'http://localhost:8080/item/{userId}',
+          {
+            title: title,
+            product_url: product_url,
+            price: price,
+            description: description,
+            hopeLocation: hopeLocation,
+            category: category,
+          },
+          {
+            headers: { Authorization: localStorage.getItem('accessToken') },
+          },
+        )
+        .then((response) => {
+          navigate(
+            `/MyPostPage?title=${title}&product_url=${product_url}&price=${price}&description=${description}&hopeLocation=${hopeLocation}`,
+          )
+        })
+        .catch((error) => console.error('Error fetching data:', error))
     }
   }
 
   const getFirstMissingField = (): string | undefined => {
-    if (!productName) return 'productName'
+    if (!title) return 'title'
     if (!price) return 'price'
     if (!description) return 'description'
-    if (!dealLocation && dealLocation !== '지역 설정 안함') return 'dealLocation'
-    if (selectedCategories.length === 0) return 'category'
+    if (!hopeLocation && hopeLocation !== '지역 설정 안함') return 'hopeLocation'
+    if (category.length === 0) return 'category'
     return undefined
   }
 
   const getMissingFields = (): string[] => {
     const fields: string[] = []
 
-    if (!productImage) fields.push('productImage')
-    if (!productName) fields.push('productName')
+    if (!product_url) fields.push('product_url')
+    if (!title) fields.push('title')
     if (!price) fields.push('price')
     if (!description) fields.push('description')
-    if (!dealLocation && dealLocation !== '지역 설정 안함') fields.push('dealLocation')
-    if (selectedCategories.length === 0) fields.push('category')
+    if (!hopeLocation && hopeLocation !== '지역 설정 안함') fields.push('hopeLocation')
+    if (category.length === 0) fields.push('category')
 
     return fields
   }
@@ -138,12 +149,12 @@ const ProductRegisterPage: React.FC = () => {
         <LabelContainer>
           <Label>
             상품 이미지
-            {missingFields.includes('productImage') && <RequiredIcon>*</RequiredIcon>}
+            {missingFields.includes('product_url') && <RequiredIcon>*</RequiredIcon>}
           </Label>
         </LabelContainer>
         <FileInputContainer>
-          {productImage ? (
-            <PreviewImage src={productImage} alt="Uploaded" />
+          {product_url ? (
+            <PreviewImage src={product_url} alt="Uploaded" />
           ) : (
             <CameraIconImg src={CameraIcon} alt="CameraIcon" onClick={handleCameraIconClick} />
           )}
@@ -155,15 +166,15 @@ const ProductRegisterPage: React.FC = () => {
         <LabelContainer>
           <Label>
             상품명
-            {missingFields.includes('productName') && <RequiredIcon>*</RequiredIcon>}
+            {missingFields.includes('title') && <RequiredIcon>*</RequiredIcon>}
           </Label>
         </LabelContainer>
         <Input
           type="text"
           placeholder="상품명을 입력해 주세요"
-          value={productName}
-          onChange={(e) => setProductName(e.target.value)}
-          ref={productNameRef}
+          value={title}
+          onChange={(e) => settitle(e.target.value)}
+          ref={titleRef}
         />
 
         <Separator />
@@ -203,15 +214,15 @@ const ProductRegisterPage: React.FC = () => {
         <LabelContainer>
           <Label>
             거래지역
-            {missingFields.includes('dealLocation') && <RequiredIcon>*</RequiredIcon>}
+            {missingFields.includes('hopeLocation') && <RequiredIcon>*</RequiredIcon>}
           </Label>
         </LabelContainer>
         <ButtonGroup>
-          {dealLocationOptions.map((option) => (
+          {hopeLocationOptions.map((option) => (
             <LocationButton
               key={option}
-              selected={dealLocation == option}
-              onClick={() => handleDealLocationButtonClick(option)}>
+              selected={hopeLocation == option}
+              onClick={() => handlehopeLocationButtonClick(option)}>
               {option}
             </LocationButton>
           ))}
@@ -220,9 +231,9 @@ const ProductRegisterPage: React.FC = () => {
         <Input
           type="text"
           placeholder="희망 거래 지역을 입력하세요"
-          value={dealLocation}
-          onChange={(e) => setDealLocation(e.target.value)}
-          ref={dealLocationRef}
+          value={hopeLocation}
+          onChange={(e) => sethopeLocation(e.target.value)}
+          ref={hopeLocationRef}
         />
 
         <Separator />
@@ -237,7 +248,7 @@ const ProductRegisterPage: React.FC = () => {
           {categories.map((categoryOption) => (
             <CategoryButton
               key={categoryOption}
-              selected={selectedCategories.includes(categoryOption)}
+              selected={category.includes(categoryOption)}
               onClick={() => handleCategoryButtonClick(categoryOption)}>
               {categoryOption}
             </CategoryButton>
@@ -395,4 +406,4 @@ const Separator = styled.div`
   margin: 16px 0;
 `
 
-export default ProductRegisterPage
+export default ProductRegister

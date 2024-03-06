@@ -137,7 +137,7 @@ function SignUpPage() {
 
   const onClickDuplicateCheckButton = () => {
     axios
-      .post('http://localhost:8080/users/check', {
+      .post(`http://localhost:8080/user/loginId_check/${loginId}`, {
         loginId: loginId,
       })
       .then((response) => {

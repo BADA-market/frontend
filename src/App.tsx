@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import TestPage from './pages/TestPage'
 import SignUpPage from './pages/SignUpPage'
 import LoginPage from './pages/LoginPage'
-import ProductRegisterPage from './pages/ProductRegisterPage'
+import ProductRegister from './pages/ProductRegisterPage'
 import MyPostPage from './pages/MyPostPage'
 import MyPage from './pages/MyPage'
 import PostFeedPage from './pages/PostFeedPage'
@@ -21,7 +21,7 @@ function App() {
           <Route path="/" element={<PostFeedPage />} />
           <Route path="/sign_up" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/ProductRegister" element={<ProductRegisterPage />} />
+          <Route path="/ProductRegister" element={<ProductRegister />} />
           <Route path="/PostFeed" element={<PostFeedPage />} />
           <Route
             path="/MyPostPage"

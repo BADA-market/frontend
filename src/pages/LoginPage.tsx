@@ -32,8 +32,7 @@ function LoginPage() {
         password: password,
       })
       .then((response) => {
-        var Bearer = 'Bearer '
-        var accessToken = Bearer.concat(response.data.Authorization)
+        var accessToken = response.headers['Authorization']
         localStorage.setItem('accessToken', accessToken)
         console.log('[accessToken]: ', accessToken)
         navigate('/')
@@ -41,15 +40,15 @@ function LoginPage() {
   }
 
   const handleKakaoBtnClick = () => {
-    axios.get('http://localhost:8080/oauth2/authorization/kakao', {})
+    window.location.href = 'http://localhost:8080/oauth2/authorization/kakao'
   }
 
   const handleNaverBtnClick = () => {
-    axios.get('http://localhost:8080/oauth2/authorization/naver', {})
+    window.location.href = 'http://localhost:8080/oauth2/authorization/naver'
   }
 
   const handleGoogleBtnClick = () => {
-    axios.get('http://localhost:8080/oauth2/authorization/google', {})
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google'
   }
 
   return (
