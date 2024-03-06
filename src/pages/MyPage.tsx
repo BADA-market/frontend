@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { item } from '../components/mypage/Item'
 import axios from 'axios'
+import { review } from '../components/mypage/review'
+import { trade } from '../components/mypage/trade'
 
 function MyPage() {
   const [requestUrl, setRequestUrl] = useState('http://localhost:8080/user/item')
   const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(null)
   const [itemList, setItemList] = useState<item[]>([])
+  const [reviewList, setReviewList] = useState<review[]>([])
+  const [tradeList, setTradeList] = useState<trade[]>([])
   const selectMenu = ['내 상품', '찜 목록', '내 후기', '거래내역']
 
   useEffect(() => {
@@ -15,13 +19,19 @@ function MyPage() {
 
   const fetchItemList = () => {
     axios
-      .get<item[]>(requestUrl, {
+      .get(requestUrl, {
         headers: { Authorization: localStorage.getItem('accessToken') },
       })
       .then((response) => {
-        setItemList(response.data)
+        if (selectedMenuIndex === 0 || selectedMenuIndex === 1) {
+          setItemList(response.data)
+        } else if (selectedMenuIndex === 2) {
+          setReviewList(response.data)
+        } else if (selectedMenuIndex === 3) {
+          setTradeList(response.data)
+        }
       })
-      .catch((error) => console.error('Error fetching item list:', error))
+      .catch((error) => console.error('Error fetching data:', error))
   }
 
   const handleMenuClick = (menuIndex: number) => {
@@ -70,7 +80,14 @@ function MyPage() {
 
       {selectedMenuIndex !== null && (
         <MenuList>
-          <p>${itemList[0].title}</p>
+          {selectedMenuIndex === 0 &&
+            itemList.map((item, index) => <p key={index}>{item.title}</p>)}
+          {selectedMenuIndex === 1 &&
+            itemList.map((item, index) => <p key={index}>{item.title}</p>)}
+          {selectedMenuIndex === 2 &&
+            reviewList.map((review, index) => <p key={index}>{review.title}</p>)}
+          {selectedMenuIndex === 3 &&
+            tradeList.map((trade, index) => <p key={index}>{trade.title}</p>)}
         </MenuList>
       )}
     </div>
