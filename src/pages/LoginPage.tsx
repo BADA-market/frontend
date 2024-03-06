@@ -40,15 +40,15 @@ function LoginPage() {
   }
 
   const handleKakaoBtnClick = () => {
-    axios.get('http://localhost:8080/oauth2/authorization/kakao', {})
+    window.location.href = 'http://localhost:8080/oauth2/authorization/kakao'
   }
 
   const handleNaverBtnClick = () => {
-    axios.get('http://localhost:8080/oauth2/authorization/naver', {})
+    window.location.href = 'http://localhost:8080/oauth2/authorization/naver'
   }
 
   const handleGoogleBtnClick = () => {
-    axios.get('http://localhost:8080/oauth2/authorization/google', {})
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google'
   }
 
   return (
