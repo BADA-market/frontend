@@ -40,27 +40,19 @@ const ProductRegister: React.FC = () => {
   const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0]
     if (file) {
-      const imageUrl = URL.createObjectURL(file)
-      setproduct_url(imageUrl)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const base64String = reader.result?.toString() || null
+        setProductImage(base64String)
+
+        // 이 부분에서 이미지를 Base64로 인코딩하여 localStorage에 저장
+        if (base64String) {
+          localStorage.setItem('latestPostImage', base64String)
+        }
+      }
+      reader.readAsDataURL(file)
     }
   }
-
-  // const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
-  //   const file = event.target.files?.[0]
-  //   if (file) {
-  //     const reader = new FileReader()
-  //     reader.onloadend = () => {
-  //       const base64String = reader.result?.toString() || null
-  //       setproduct_url(base64String)
-
-  //       // 이 부분에서 이미지를 Base64로 인코딩하여 localStorage에 저장
-  //       if (base64String) {
-  //         localStorage.setItem('latestPostImage', base64String)
-  //       }
-  //     }
-  //     reader.readAsDataURL(file)
-  //   }
-  // }
 
   const handleCategoryButtonClick = (category: string) => {
     setcategory((prevCategories) => {
