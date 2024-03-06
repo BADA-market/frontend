@@ -24,7 +24,7 @@ const Header: React.FC = () => {
   }
 
   const handleProductRegisterBtnClick = () => {
-    navigate('/ProductRegisterPage')
+    navigate('/ProductRegister')
   }
 
   const handleMypageBtnClick = () => {
